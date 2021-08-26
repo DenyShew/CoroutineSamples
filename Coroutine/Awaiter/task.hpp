@@ -38,7 +38,7 @@ struct task<void>
             }
         }
 
-        bool await_ready()
+        bool await_ready()noexcept
         {
             return is_resume;
         }
@@ -61,6 +61,11 @@ struct task<void>
             ALWAYS, NEVER, CLASSIC
         };
 
+        awaiter()
+        {
+            is_resume = false;
+        }
+
         awaiter(TYPE_AWAIT type)
         {
             switch(type)
@@ -80,7 +85,7 @@ struct task<void>
             }
         }
 
-        bool await_ready()
+        bool await_ready()noexcept
         {
             return is_resume;
         }
@@ -103,17 +108,13 @@ struct task<void>
         {
             return std::coroutine_handle<promise_type>::from_promise(*this);
         }
-        auto ititial_suspend()
+        auto initial_suspend()noexcept
         {
             return classic_awaiter(classic_awaiter::TYPE_AWAIT::CLASSIC);
         }
-        auto final_suspend()
+        auto final_suspend()noexcept
         {
             return classic_awaiter(classic_awaiter::TYPE_AWAIT::CLASSIC);
-        }
-        auto return_value()
-        {
-
         }
         void return_void()
         {
@@ -186,7 +187,7 @@ struct task
             }
         }
 
-        bool await_ready()
+        bool await_ready()noexcept
         {
             return is_resume;
         }
@@ -209,6 +210,11 @@ struct task
             ALWAYS, NEVER, CLASSIC
         };
 
+        awaiter()
+        {
+            is_resume = false;
+        }
+
         awaiter(TYPE_AWAIT type)
         {
             switch(type)
@@ -228,7 +234,7 @@ struct task
             }
         }
 
-        bool await_ready()
+        bool await_ready()noexcept
         {
             return is_resume;
         }
@@ -258,17 +264,13 @@ struct task
         {
             return std::coroutine_handle<promise_type>::from_promise(*this);
         }
-        auto ititial_suspend()
+        auto initial_suspend()noexcept
         {
             return classic_awaiterc(classic_awaiter::TYPE_AWAIT::CLASSIC);
         }
-        auto final_suspend()
+        auto final_suspend()noexcept
         {
             return classic_awaiter(classic_awaiter::TYPE_AWAIT::CLASSIC);
-        }
-        auto return_value()
-        {
-
         }
         void return_void()
         {
@@ -277,6 +279,11 @@ struct task
         void unhandled_exception()
         {
             
+        }
+
+        void set_handle_on_awaiter(std::coroutine_handle<promise_type> coro)
+        {
+            wt.set_handle(coro);
         }
 
     protected:
