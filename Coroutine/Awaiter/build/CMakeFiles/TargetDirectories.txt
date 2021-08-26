@@ -1,0 +1,3 @@
+/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/edit_cache.dir
+/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/rebuild_cache.dir
+/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/Generator.dir
