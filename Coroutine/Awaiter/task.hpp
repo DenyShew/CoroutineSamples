@@ -2,77 +2,202 @@
 #define __TASK_H__
 
 #include <coroutine>
-#include <vector>
 
-struct task
+template<typename T>
+struct task;
+
+//Asymmetric coroutine
+template<>
+struct task<void>
 {
-    struct awaiter;
-
     struct promise_type;
 
-    task()
+    struct awaiter
     {
-        
-    }
-};
-
-struct task::awaiter
-{
-    enum class TYPE_AWAIT
-    {
-        ALWAYS, NEVER, CLASSIC
-    };
-
-    awaiter(TYPE_AWAIT type)
-    {
-        switch(type)
+        enum class TYPE_AWAIT
         {
-            case TYPE_AWAIT::ALWAYS:
+            ALWAYS, NEVER, CLASSIC
+        };
+
+        awaiter(TYPE_AWAIT type)
+        {
+            switch(type)
             {
-                is_resume = false; 
-            }
-            case TYPE_AWAIT::NEVER:
-            {
-                is_resume = true;
-            }
-            case TYPE_AWAIT::CLASSIC:
-            {
-                is_resume = false;
+                case TYPE_AWAIT::ALWAYS:
+                {
+                    is_resume = false; 
+                }
+                case TYPE_AWAIT::NEVER:
+                {
+                    is_resume = true;
+                }
+                case TYPE_AWAIT::CLASSIC:
+                {
+                    is_resume = false;
+                }
             }
         }
-    }
 
-    bool await_ready()
+        bool await_ready()
+        {
+            return is_resume;
+        }
+        void await_suspend(std::coroutine_handle<promise_type> coro)noexcept
+        {
+            
+        }
+        auto await_resume()noexcept
+        {
+
+        }
+
+    protected:
+        bool is_resume;
+    };
+
+    struct promise_type
     {
-        return is_resume;
-    }
-    auto await_suspend(std::coroutine_handle<task::promise_type> coro)noexcept
+        auto get_return_object()
+        {
+            return std::coroutine_handle<promise_type>::from_promise(*this);
+        }
+        auto ititial_suspend()
+        {
+            
+        }
+        auto final_suspend()
+        {
+
+        }
+        auto return_value()
+        {
+
+        }
+        void return_void()
+        {
+
+        }
+        void unhandled_exception()
+        {
+            
+        }
+    };
+
+    task(std::coroutine_handle<promise_type> coro)
+        : handle(coro)
     {
 
     }
-    auto await_resume()noexcept
-    {
 
+    ~task()
+    {
+        handle.destroy();
     }
 
-private:
-    bool is_resume;
+    std::coroutine_handle<promise_type> get_handle()
+    {
+        return this->handle;
+    }
+
+protected:
+    std::coroutine_handle<promise_type> handle;
 };
 
-struct task::promise_type
+//Symmetric coroutine
+template<typename T>
+struct task
 {
-    auto get_return_object()
+    struct promise_type;
+
+    struct awaiter
     {
-        return std::coroutine_handle<promise_type>::from_promise(*this);
-    }
-    auto ititial_suspend()
+        enum class TYPE_AWAIT
+        {
+            ALWAYS, NEVER, CLASSIC
+        };
+
+        awaiter(TYPE_AWAIT type)
+        {
+            switch(type)
+            {
+                case TYPE_AWAIT::ALWAYS:
+                {
+                    is_resume = false; 
+                }
+                case TYPE_AWAIT::NEVER:
+                {
+                    is_resume = true;
+                }
+                case TYPE_AWAIT::CLASSIC:
+                {
+                    is_resume = false;
+                }
+            }
+        }
+
+        bool await_ready()
+        {
+            return is_resume;
+        }
+        auto await_suspend(std::coroutine_handle<promise_type> coro)noexcept
+        {
+            return coro;
+        }
+        auto await_resume()noexcept
+        {
+
+        }
+
+    protected:
+        bool is_resume;
+    };
+
+    struct promise_type
+    {
+        auto get_return_object()
+        {
+            return std::coroutine_handle<promise_type>::from_promise(*this);
+        }
+        auto ititial_suspend()
+        {
+            
+        }
+        auto final_suspend()
+        {
+
+        }
+        auto return_value()
+        {
+
+        }
+        void return_void()
+        {
+
+        }
+        void unhandled_exception()
+        {
+            
+        }
+    };
+
+    task(std::coroutine_handle<promise_type> coro)
+        : handle(coro)
     {
 
     }
-    auto final_suspend()
-    {
 
+    ~task()
+    {
+        handle.destroy();
     }
+
+    std::coroutine_handle<promise_type>& get_handle()
+    {
+        return handle;
+    }
+
+protected:
+    std::coroutine_handle<promise_type> handle;
 };
 
 #endif // __TASK_H__
