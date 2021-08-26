@@ -65,16 +65,6 @@ CMAKE_BINARY_DIR = /home/denys/repo/Joys/Coroutine/Awaiter/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -84,6 +74,16 @@ rebuild_cache:
 # Special rule for the target rebuild_cache
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Generator
+# Target rules for targets named Awaiter
 
 # Build rule for target.
-Generator: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Generator
-.PHONY : Generator
+Awaiter: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Awaiter
+.PHONY : Awaiter
 
 # fast build rule for target.
-Generator/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Generator.dir/build.make CMakeFiles/Generator.dir/build
-.PHONY : Generator/fast
+Awaiter/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/build
+.PHONY : Awaiter/fast
 
 main.o: main.cpp.o
 .PHONY : main.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Generator.dir/build.make CMakeFiles/Generator.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -142,7 +142,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Generator.dir/build.make CMakeFiles/Generator.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -150,7 +150,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Generator.dir/build.make CMakeFiles/Generator.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -161,7 +161,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... Generator"
+	@echo "... Awaiter"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
