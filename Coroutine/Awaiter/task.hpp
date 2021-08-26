@@ -10,7 +10,10 @@ struct task
 
     struct promise_type;
 
-
+    task()
+    {
+        
+    }
 };
 
 struct task::awaiter
