@@ -50,6 +50,8 @@ struct task<void>
         {
 
         }
+    protected:
+        bool is_resume;
     };
 
     struct awaiter
@@ -103,11 +105,11 @@ struct task<void>
         }
         auto ititial_suspend()
         {
-            return classic_awaiter{};
+            return classic_awaiter(classic_awaiter::TYPE_AWAIT::CLASSIC);
         }
         auto final_suspend()
         {
-            return classic_awaiter{};
+            return classic_awaiter(classic_awaiter::TYPE_AWAIT::CLASSIC);
         }
         auto return_value()
         {
@@ -135,6 +137,12 @@ struct task<void>
     ~task()
     {
         handle.destroy();
+    }
+
+    bool resume()
+    {
+        if(!handle.done())handle.resume();
+        return !handle.done();
     }
 
     std::coroutine_handle<promise_type> get_handle()
@@ -190,6 +198,8 @@ struct task
         {
 
         }
+    protected:
+        bool is_resume;
     };
 
     struct awaiter
@@ -250,11 +260,11 @@ struct task
         }
         auto ititial_suspend()
         {
-            return classic_awaiter{};
+            return classic_awaiterc(classic_awaiter::TYPE_AWAIT::CLASSIC);
         }
         auto final_suspend()
         {
-            return classic_awaiter{};
+            return classic_awaiter(classic_awaiter::TYPE_AWAIT::CLASSIC);
         }
         auto return_value()
         {
@@ -283,6 +293,12 @@ struct task
     ~task()
     {
         handle.destroy();
+    }
+
+    bool resume()
+    {
+        if(!handle.done())handle.resume();
+        return !handle.done();
     }
 
     std::coroutine_handle<promise_type>& get_handle()
