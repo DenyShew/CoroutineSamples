@@ -12,6 +12,46 @@ struct task<void>
 {
     struct promise_type;
 
+    struct classic_awaiter
+    {
+        enum class TYPE_AWAIT
+        {
+            ALWAYS, NEVER, CLASSIC
+        };
+
+        classic_awaiter(TYPE_AWAIT type)
+        {
+            switch(type)
+            {
+                case TYPE_AWAIT::ALWAYS:
+                {
+                    is_resume = false; 
+                }
+                case TYPE_AWAIT::NEVER:
+                {
+                    is_resume = true;
+                }
+                case TYPE_AWAIT::CLASSIC:
+                {
+                    is_resume = false;
+                }
+            }
+        }
+
+        bool await_ready()
+        {
+            return is_resume;
+        }
+        void await_suspend(std::coroutine_handle<promise_type> coro)noexcept
+        {
+            
+        }
+        auto await_resume()noexcept
+        {
+
+        }
+    };
+
     struct awaiter
     {
         enum class TYPE_AWAIT
@@ -63,11 +103,11 @@ struct task<void>
         }
         auto ititial_suspend()
         {
-            
+            return classic_awaiter{};
         }
         auto final_suspend()
         {
-
+            return classic_awaiter{};
         }
         auto return_value()
         {
@@ -81,6 +121,9 @@ struct task<void>
         {
             
         }
+        
+    protected:
+        awaiter wt;
     };
 
     task(std::coroutine_handle<promise_type> coro)
@@ -108,6 +151,46 @@ template<typename T>
 struct task
 {
     struct promise_type;
+
+    struct classic_awaiter
+    {
+        enum class TYPE_AWAIT
+        {
+            ALWAYS, NEVER, CLASSIC
+        };
+
+        classic_awaiter(TYPE_AWAIT type)
+        {
+            switch(type)
+            {
+                case TYPE_AWAIT::ALWAYS:
+                {
+                    is_resume = false; 
+                }
+                case TYPE_AWAIT::NEVER:
+                {
+                    is_resume = true;
+                }
+                case TYPE_AWAIT::CLASSIC:
+                {
+                    is_resume = false;
+                }
+            }
+        }
+
+        bool await_ready()
+        {
+            return is_resume;
+        }
+        void await_suspend(std::coroutine_handle<promise_type> coro)noexcept
+        {
+            
+        }
+        auto await_resume()noexcept
+        {
+
+        }
+    };
 
     struct awaiter
     {
@@ -141,15 +224,22 @@ struct task
         }
         auto await_suspend(std::coroutine_handle<promise_type> coro)noexcept
         {
-            return coro;
+            //todo some code...
+            return handle;
         }
         auto await_resume()noexcept
         {
 
         }
 
+        void set_handle(std::coroutine_handle<promise_type> coro)
+        {
+            this->handle = coro;
+        }
+
     protected:
         bool is_resume;
+        std::coroutine_handle<promise_type> handle;
     };
 
     struct promise_type
@@ -160,11 +250,11 @@ struct task
         }
         auto ititial_suspend()
         {
-            
+            return classic_awaiter{};
         }
         auto final_suspend()
         {
-
+            return classic_awaiter{};
         }
         auto return_value()
         {
@@ -178,6 +268,10 @@ struct task
         {
             
         }
+
+    protected:
+
+        awaiter wt;
     };
 
     task(std::coroutine_handle<promise_type> coro)
