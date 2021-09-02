@@ -209,7 +209,8 @@ Task/CMakeFiles/Task.dir/clean:
 # Target rules for target TaskHandler/CMakeFiles/TaskHandler.dir
 
 # All Build rule for target.
-TaskHandler/CMakeFiles/TaskHandler.dir/all:
+TaskHandler/CMakeFiles/TaskHandler.dir/all: Waiter/CMakeFiles/Waiter.dir/all
+TaskHandler/CMakeFiles/TaskHandler.dir/all: Task/CMakeFiles/Task.dir/all
 	$(MAKE) $(MAKESILENT) -f TaskHandler/CMakeFiles/TaskHandler.dir/build.make TaskHandler/CMakeFiles/TaskHandler.dir/depend
 	$(MAKE) $(MAKESILENT) -f TaskHandler/CMakeFiles/TaskHandler.dir/build.make TaskHandler/CMakeFiles/TaskHandler.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles --progress-num=5,6 "Built target TaskHandler"
@@ -217,7 +218,7 @@ TaskHandler/CMakeFiles/TaskHandler.dir/all:
 
 # Build rule for subdir invocation for target.
 TaskHandler/CMakeFiles/TaskHandler.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TaskHandler/CMakeFiles/TaskHandler.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 0
 .PHONY : TaskHandler/CMakeFiles/TaskHandler.dir/rule

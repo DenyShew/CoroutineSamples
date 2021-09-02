@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.21)
+project(Awaiter CXX)
+
 add_compile_options(-Werror)
 add_compile_options(-pedantic-errors)
 add_compile_options(-Wall)
