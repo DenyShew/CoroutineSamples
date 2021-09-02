@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "coroutine": "cpp",
-        "future": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "Disabled"
-}

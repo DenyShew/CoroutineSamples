@@ -1,0 +1,1 @@
+add_library(TaskHandler TaskHandler.hpp TaskHandler.cpp)

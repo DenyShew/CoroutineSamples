@@ -129,29 +129,59 @@ Awaiter/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/build
 .PHONY : Awaiter/fast
 
-main.o: main.cpp.o
-.PHONY : main.o
+#=============================================================================
+# Target rules for targets named Waiter
+
+# Build rule for target.
+Waiter: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Waiter
+.PHONY : Waiter
+
+# fast build rule for target.
+Waiter/fast:
+	$(MAKE) $(MAKESILENT) -f Waiter/CMakeFiles/Waiter.dir/build.make Waiter/CMakeFiles/Waiter.dir/build
+.PHONY : Waiter/fast
+
+#=============================================================================
+# Target rules for targets named Task
+
+# Build rule for target.
+Task: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Task
+.PHONY : Task
+
+# fast build rule for target.
+Task/fast:
+	$(MAKE) $(MAKESILENT) -f Task/CMakeFiles/Task.dir/build.make Task/CMakeFiles/Task.dir/build
+.PHONY : Task/fast
+
+#=============================================================================
+# Target rules for targets named TaskHandler
+
+# Build rule for target.
+TaskHandler: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TaskHandler
+.PHONY : TaskHandler
+
+# fast build rule for target.
+TaskHandler/fast:
+	$(MAKE) $(MAKESILENT) -f TaskHandler/CMakeFiles/TaskHandler.dir/build.make TaskHandler/CMakeFiles/TaskHandler.dir/build
+.PHONY : TaskHandler/fast
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
-.PHONY : main.i
+main.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.o
+.PHONY : main.o
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-.PHONY : main.s
+main.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.i
+.PHONY : main.i
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.s
-.PHONY : main.cpp.s
+main.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.s
+.PHONY : main.s
 
 # Help Target
 help:
@@ -162,6 +192,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Awaiter"
+	@echo "... Task"
+	@echo "... TaskHandler"
+	@echo "... Waiter"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
