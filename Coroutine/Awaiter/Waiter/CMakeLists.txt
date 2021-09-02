@@ -1,1 +1,1 @@
-add_library(Waiter STATIC Waiter.hpp Waiter.cpp)
+add_library(Waiter STATIC Waiter.hpp)
