@@ -1,12 +1,16 @@
-/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/rebuild_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/edit_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/Awaiter.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/Waiter/CMakeFiles/rebuild_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/Waiter/CMakeFiles/edit_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/Waiter/CMakeFiles/Waiter.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/Task/CMakeFiles/rebuild_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/Task/CMakeFiles/edit_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/Task/CMakeFiles/Task.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/TaskHandler/CMakeFiles/rebuild_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/TaskHandler/CMakeFiles/edit_cache.dir
-/home/denys/repo/Joys/Coroutine/Awaiter/build/TaskHandler/CMakeFiles/TaskHandler.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/rebuild_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles/edit_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/CMakeFiles/rebuild_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/CMakeFiles/edit_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/Waiter/CMakeFiles/rebuild_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/Waiter/CMakeFiles/edit_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/Waiter/CMakeFiles/Waiter.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/Task/CMakeFiles/rebuild_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/Task/CMakeFiles/edit_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/Task/CMakeFiles/Task.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/TaskHandler/CMakeFiles/rebuild_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/TaskHandler/CMakeFiles/edit_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/TaskHandler/CMakeFiles/TaskHandler.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/app/CMakeFiles/rebuild_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/app/CMakeFiles/edit_cache.dir
+/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/app/CMakeFiles/Awaiter.dir

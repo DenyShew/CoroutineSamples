@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/denys/repo/Joys/Coroutine/Awaiter
+CMAKE_SOURCE_DIR = "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/denys/repo/Joys/Coroutine/Awaiter/build
+CMAKE_BINARY_DIR = "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles /home/denys/repo/Joys/Coroutine/Awaiter/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build//CMakeFiles/progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -117,19 +117,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Awaiter
-
-# Build rule for target.
-Awaiter: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Awaiter
-.PHONY : Awaiter
-
-# fast build rule for target.
-Awaiter/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/build
-.PHONY : Awaiter/fast
-
-#=============================================================================
 # Target rules for targets named Waiter
 
 # Build rule for target.
@@ -139,7 +126,7 @@ Waiter: cmake_check_build_system
 
 # fast build rule for target.
 Waiter/fast:
-	$(MAKE) $(MAKESILENT) -f Waiter/CMakeFiles/Waiter.dir/build.make Waiter/CMakeFiles/Waiter.dir/build
+	$(MAKE) $(MAKESILENT) -f src/Waiter/CMakeFiles/Waiter.dir/build.make src/Waiter/CMakeFiles/Waiter.dir/build
 .PHONY : Waiter/fast
 
 #=============================================================================
@@ -152,7 +139,7 @@ Task: cmake_check_build_system
 
 # fast build rule for target.
 Task/fast:
-	$(MAKE) $(MAKESILENT) -f Task/CMakeFiles/Task.dir/build.make Task/CMakeFiles/Task.dir/build
+	$(MAKE) $(MAKESILENT) -f src/Task/CMakeFiles/Task.dir/build.make src/Task/CMakeFiles/Task.dir/build
 .PHONY : Task/fast
 
 #=============================================================================
@@ -165,32 +152,21 @@ TaskHandler: cmake_check_build_system
 
 # fast build rule for target.
 TaskHandler/fast:
-	$(MAKE) $(MAKESILENT) -f TaskHandler/CMakeFiles/TaskHandler.dir/build.make TaskHandler/CMakeFiles/TaskHandler.dir/build
+	$(MAKE) $(MAKESILENT) -f src/TaskHandler/CMakeFiles/TaskHandler.dir/build.make src/TaskHandler/CMakeFiles/TaskHandler.dir/build
 .PHONY : TaskHandler/fast
 
-main.o: main.cpp.o
-.PHONY : main.o
+#=============================================================================
+# Target rules for targets named Awaiter
 
-# target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.o
-.PHONY : main.cpp.o
+# Build rule for target.
+Awaiter: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Awaiter
+.PHONY : Awaiter
 
-main.i: main.cpp.i
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/main.cpp.s
-.PHONY : main.cpp.s
+# fast build rule for target.
+Awaiter/fast:
+	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/Awaiter.dir/build.make app/CMakeFiles/Awaiter.dir/build
+.PHONY : Awaiter/fast
 
 # Help Target
 help:
@@ -204,9 +180,6 @@ help:
 	@echo "... Task"
 	@echo "... TaskHandler"
 	@echo "... Waiter"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
 .PHONY : help
 
 

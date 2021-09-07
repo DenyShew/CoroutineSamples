@@ -1,4 +1,4 @@
-# Install script for directory: /home/denys/repo/Joys/Coroutine/Awaiter
+# Install script for directory: /home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,17 +44,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/denys/repo/Joys/Coroutine/Awaiter/build/Waiter/cmake_install.cmake")
+  include("/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/src/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/denys/repo/Joys/Coroutine/Awaiter/build/Task/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("/home/denys/repo/Joys/Coroutine/Awaiter/build/TaskHandler/cmake_install.cmake")
+  include("/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/app/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -65,5 +60,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/denys/repo/Joys/Coroutine/Awaiter/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

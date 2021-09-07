@@ -54,183 +54,216 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/denys/repo/Joys/Coroutine/Awaiter
+CMAKE_SOURCE_DIR = "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/denys/repo/Joys/Coroutine/Awaiter/build
+CMAKE_BINARY_DIR = "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build"
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/Awaiter.dir/all
-all: Waiter/all
-all: Task/all
-all: TaskHandler/all
+all: src/all
+all: app/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall: Waiter/preinstall
-preinstall: Task/preinstall
-preinstall: TaskHandler/preinstall
+preinstall: src/preinstall
+preinstall: app/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/Awaiter.dir/clean
-clean: Waiter/clean
-clean: Task/clean
-clean: TaskHandler/clean
+clean: src/clean
+clean: app/clean
 .PHONY : clean
 
 #=============================================================================
-# Directory level rules for directory Task
+# Directory level rules for directory app
 
 # Recursive "all" directory target.
-Task/all: Task/CMakeFiles/Task.dir/all
-.PHONY : Task/all
+app/all: app/CMakeFiles/Awaiter.dir/all
+.PHONY : app/all
 
 # Recursive "preinstall" directory target.
-Task/preinstall:
-.PHONY : Task/preinstall
+app/preinstall:
+.PHONY : app/preinstall
 
 # Recursive "clean" directory target.
-Task/clean: Task/CMakeFiles/Task.dir/clean
-.PHONY : Task/clean
+app/clean: app/CMakeFiles/Awaiter.dir/clean
+.PHONY : app/clean
 
 #=============================================================================
-# Directory level rules for directory TaskHandler
+# Directory level rules for directory src
 
 # Recursive "all" directory target.
-TaskHandler/all: TaskHandler/CMakeFiles/TaskHandler.dir/all
-.PHONY : TaskHandler/all
+src/all: src/Waiter/all
+src/all: src/Task/all
+src/all: src/TaskHandler/all
+.PHONY : src/all
 
 # Recursive "preinstall" directory target.
-TaskHandler/preinstall:
-.PHONY : TaskHandler/preinstall
+src/preinstall: src/Waiter/preinstall
+src/preinstall: src/Task/preinstall
+src/preinstall: src/TaskHandler/preinstall
+.PHONY : src/preinstall
 
 # Recursive "clean" directory target.
-TaskHandler/clean: TaskHandler/CMakeFiles/TaskHandler.dir/clean
-.PHONY : TaskHandler/clean
+src/clean: src/Waiter/clean
+src/clean: src/Task/clean
+src/clean: src/TaskHandler/clean
+.PHONY : src/clean
 
 #=============================================================================
-# Directory level rules for directory Waiter
+# Directory level rules for directory src/Task
 
 # Recursive "all" directory target.
-Waiter/all: Waiter/CMakeFiles/Waiter.dir/all
-.PHONY : Waiter/all
+src/Task/all: src/Task/CMakeFiles/Task.dir/all
+.PHONY : src/Task/all
 
 # Recursive "preinstall" directory target.
-Waiter/preinstall:
-.PHONY : Waiter/preinstall
+src/Task/preinstall:
+.PHONY : src/Task/preinstall
 
 # Recursive "clean" directory target.
-Waiter/clean: Waiter/CMakeFiles/Waiter.dir/clean
-.PHONY : Waiter/clean
+src/Task/clean: src/Task/CMakeFiles/Task.dir/clean
+.PHONY : src/Task/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/Awaiter.dir
+# Directory level rules for directory src/TaskHandler
+
+# Recursive "all" directory target.
+src/TaskHandler/all: src/TaskHandler/CMakeFiles/TaskHandler.dir/all
+.PHONY : src/TaskHandler/all
+
+# Recursive "preinstall" directory target.
+src/TaskHandler/preinstall:
+.PHONY : src/TaskHandler/preinstall
+
+# Recursive "clean" directory target.
+src/TaskHandler/clean: src/TaskHandler/CMakeFiles/TaskHandler.dir/clean
+.PHONY : src/TaskHandler/clean
+
+#=============================================================================
+# Directory level rules for directory src/Waiter
+
+# Recursive "all" directory target.
+src/Waiter/all: src/Waiter/CMakeFiles/Waiter.dir/all
+.PHONY : src/Waiter/all
+
+# Recursive "preinstall" directory target.
+src/Waiter/preinstall:
+.PHONY : src/Waiter/preinstall
+
+# Recursive "clean" directory target.
+src/Waiter/clean: src/Waiter/CMakeFiles/Waiter.dir/clean
+.PHONY : src/Waiter/clean
+
+#=============================================================================
+# Target rules for target src/Waiter/CMakeFiles/Waiter.dir
 
 # All Build rule for target.
-CMakeFiles/Awaiter.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles --progress-num=1,2 "Built target Awaiter"
-.PHONY : CMakeFiles/Awaiter.dir/all
+src/Waiter/CMakeFiles/Waiter.dir/all:
+	$(MAKE) $(MAKESILENT) -f src/Waiter/CMakeFiles/Waiter.dir/build.make src/Waiter/CMakeFiles/Waiter.dir/depend
+	$(MAKE) $(MAKESILENT) -f src/Waiter/CMakeFiles/Waiter.dir/build.make src/Waiter/CMakeFiles/Waiter.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" --progress-num=7,8 "Built target Waiter"
+.PHONY : src/Waiter/CMakeFiles/Waiter.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/Awaiter.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Awaiter.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 0
-.PHONY : CMakeFiles/Awaiter.dir/rule
+src/Waiter/CMakeFiles/Waiter.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/Waiter/CMakeFiles/Waiter.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 0
+.PHONY : src/Waiter/CMakeFiles/Waiter.dir/rule
 
 # Convenience name for target.
-Awaiter: CMakeFiles/Awaiter.dir/rule
-.PHONY : Awaiter
-
-# clean rule for target.
-CMakeFiles/Awaiter.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Awaiter.dir/build.make CMakeFiles/Awaiter.dir/clean
-.PHONY : CMakeFiles/Awaiter.dir/clean
-
-#=============================================================================
-# Target rules for target Waiter/CMakeFiles/Waiter.dir
-
-# All Build rule for target.
-Waiter/CMakeFiles/Waiter.dir/all:
-	$(MAKE) $(MAKESILENT) -f Waiter/CMakeFiles/Waiter.dir/build.make Waiter/CMakeFiles/Waiter.dir/depend
-	$(MAKE) $(MAKESILENT) -f Waiter/CMakeFiles/Waiter.dir/build.make Waiter/CMakeFiles/Waiter.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles --progress-num=7,8 "Built target Waiter"
-.PHONY : Waiter/CMakeFiles/Waiter.dir/all
-
-# Build rule for subdir invocation for target.
-Waiter/CMakeFiles/Waiter.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Waiter/CMakeFiles/Waiter.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 0
-.PHONY : Waiter/CMakeFiles/Waiter.dir/rule
-
-# Convenience name for target.
-Waiter: Waiter/CMakeFiles/Waiter.dir/rule
+Waiter: src/Waiter/CMakeFiles/Waiter.dir/rule
 .PHONY : Waiter
 
 # clean rule for target.
-Waiter/CMakeFiles/Waiter.dir/clean:
-	$(MAKE) $(MAKESILENT) -f Waiter/CMakeFiles/Waiter.dir/build.make Waiter/CMakeFiles/Waiter.dir/clean
-.PHONY : Waiter/CMakeFiles/Waiter.dir/clean
+src/Waiter/CMakeFiles/Waiter.dir/clean:
+	$(MAKE) $(MAKESILENT) -f src/Waiter/CMakeFiles/Waiter.dir/build.make src/Waiter/CMakeFiles/Waiter.dir/clean
+.PHONY : src/Waiter/CMakeFiles/Waiter.dir/clean
 
 #=============================================================================
-# Target rules for target Task/CMakeFiles/Task.dir
+# Target rules for target src/Task/CMakeFiles/Task.dir
 
 # All Build rule for target.
-Task/CMakeFiles/Task.dir/all: Waiter/CMakeFiles/Waiter.dir/all
-	$(MAKE) $(MAKESILENT) -f Task/CMakeFiles/Task.dir/build.make Task/CMakeFiles/Task.dir/depend
-	$(MAKE) $(MAKESILENT) -f Task/CMakeFiles/Task.dir/build.make Task/CMakeFiles/Task.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles --progress-num=3,4 "Built target Task"
-.PHONY : Task/CMakeFiles/Task.dir/all
+src/Task/CMakeFiles/Task.dir/all: src/Waiter/CMakeFiles/Waiter.dir/all
+	$(MAKE) $(MAKESILENT) -f src/Task/CMakeFiles/Task.dir/build.make src/Task/CMakeFiles/Task.dir/depend
+	$(MAKE) $(MAKESILENT) -f src/Task/CMakeFiles/Task.dir/build.make src/Task/CMakeFiles/Task.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" --progress-num=3,4 "Built target Task"
+.PHONY : src/Task/CMakeFiles/Task.dir/all
 
 # Build rule for subdir invocation for target.
-Task/CMakeFiles/Task.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Task/CMakeFiles/Task.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 0
-.PHONY : Task/CMakeFiles/Task.dir/rule
+src/Task/CMakeFiles/Task.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/Task/CMakeFiles/Task.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 0
+.PHONY : src/Task/CMakeFiles/Task.dir/rule
 
 # Convenience name for target.
-Task: Task/CMakeFiles/Task.dir/rule
+Task: src/Task/CMakeFiles/Task.dir/rule
 .PHONY : Task
 
 # clean rule for target.
-Task/CMakeFiles/Task.dir/clean:
-	$(MAKE) $(MAKESILENT) -f Task/CMakeFiles/Task.dir/build.make Task/CMakeFiles/Task.dir/clean
-.PHONY : Task/CMakeFiles/Task.dir/clean
+src/Task/CMakeFiles/Task.dir/clean:
+	$(MAKE) $(MAKESILENT) -f src/Task/CMakeFiles/Task.dir/build.make src/Task/CMakeFiles/Task.dir/clean
+.PHONY : src/Task/CMakeFiles/Task.dir/clean
 
 #=============================================================================
-# Target rules for target TaskHandler/CMakeFiles/TaskHandler.dir
+# Target rules for target src/TaskHandler/CMakeFiles/TaskHandler.dir
 
 # All Build rule for target.
-TaskHandler/CMakeFiles/TaskHandler.dir/all: Waiter/CMakeFiles/Waiter.dir/all
-TaskHandler/CMakeFiles/TaskHandler.dir/all: Task/CMakeFiles/Task.dir/all
-	$(MAKE) $(MAKESILENT) -f TaskHandler/CMakeFiles/TaskHandler.dir/build.make TaskHandler/CMakeFiles/TaskHandler.dir/depend
-	$(MAKE) $(MAKESILENT) -f TaskHandler/CMakeFiles/TaskHandler.dir/build.make TaskHandler/CMakeFiles/TaskHandler.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles --progress-num=5,6 "Built target TaskHandler"
-.PHONY : TaskHandler/CMakeFiles/TaskHandler.dir/all
+src/TaskHandler/CMakeFiles/TaskHandler.dir/all: src/Waiter/CMakeFiles/Waiter.dir/all
+src/TaskHandler/CMakeFiles/TaskHandler.dir/all: src/Task/CMakeFiles/Task.dir/all
+	$(MAKE) $(MAKESILENT) -f src/TaskHandler/CMakeFiles/TaskHandler.dir/build.make src/TaskHandler/CMakeFiles/TaskHandler.dir/depend
+	$(MAKE) $(MAKESILENT) -f src/TaskHandler/CMakeFiles/TaskHandler.dir/build.make src/TaskHandler/CMakeFiles/TaskHandler.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" --progress-num=5,6 "Built target TaskHandler"
+.PHONY : src/TaskHandler/CMakeFiles/TaskHandler.dir/all
 
 # Build rule for subdir invocation for target.
-TaskHandler/CMakeFiles/TaskHandler.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 6
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TaskHandler/CMakeFiles/TaskHandler.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/denys/repo/Joys/Coroutine/Awaiter/build/CMakeFiles 0
-.PHONY : TaskHandler/CMakeFiles/TaskHandler.dir/rule
+src/TaskHandler/CMakeFiles/TaskHandler.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/TaskHandler/CMakeFiles/TaskHandler.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 0
+.PHONY : src/TaskHandler/CMakeFiles/TaskHandler.dir/rule
 
 # Convenience name for target.
-TaskHandler: TaskHandler/CMakeFiles/TaskHandler.dir/rule
+TaskHandler: src/TaskHandler/CMakeFiles/TaskHandler.dir/rule
 .PHONY : TaskHandler
 
 # clean rule for target.
-TaskHandler/CMakeFiles/TaskHandler.dir/clean:
-	$(MAKE) $(MAKESILENT) -f TaskHandler/CMakeFiles/TaskHandler.dir/build.make TaskHandler/CMakeFiles/TaskHandler.dir/clean
-.PHONY : TaskHandler/CMakeFiles/TaskHandler.dir/clean
+src/TaskHandler/CMakeFiles/TaskHandler.dir/clean:
+	$(MAKE) $(MAKESILENT) -f src/TaskHandler/CMakeFiles/TaskHandler.dir/build.make src/TaskHandler/CMakeFiles/TaskHandler.dir/clean
+.PHONY : src/TaskHandler/CMakeFiles/TaskHandler.dir/clean
+
+#=============================================================================
+# Target rules for target app/CMakeFiles/Awaiter.dir
+
+# All Build rule for target.
+app/CMakeFiles/Awaiter.dir/all: src/Waiter/CMakeFiles/Waiter.dir/all
+app/CMakeFiles/Awaiter.dir/all: src/Task/CMakeFiles/Task.dir/all
+app/CMakeFiles/Awaiter.dir/all: src/TaskHandler/CMakeFiles/TaskHandler.dir/all
+	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/Awaiter.dir/build.make app/CMakeFiles/Awaiter.dir/depend
+	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/Awaiter.dir/build.make app/CMakeFiles/Awaiter.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" --progress-num=1,2 "Built target Awaiter"
+.PHONY : app/CMakeFiles/Awaiter.dir/all
+
+# Build rule for subdir invocation for target.
+app/CMakeFiles/Awaiter.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/Awaiter.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/denys/Рабочий стол/repo/Joys/Coroutine/Awaiter/build/CMakeFiles" 0
+.PHONY : app/CMakeFiles/Awaiter.dir/rule
+
+# Convenience name for target.
+Awaiter: app/CMakeFiles/Awaiter.dir/rule
+.PHONY : Awaiter
+
+# clean rule for target.
+app/CMakeFiles/Awaiter.dir/clean:
+	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/Awaiter.dir/build.make app/CMakeFiles/Awaiter.dir/clean
+.PHONY : app/CMakeFiles/Awaiter.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
