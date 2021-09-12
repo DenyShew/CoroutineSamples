@@ -17,3 +17,6 @@ SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg -fcoroutines")
 
 add_subdirectory(src)
 add_subdirectory(app)
+
+target_link_libraries(Waiter PUBLIC TaskHandler)
+target_link_libraries(Task PUBLIC Waiter)
