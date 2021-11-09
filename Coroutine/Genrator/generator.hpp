@@ -36,6 +36,15 @@ struct generator
         return handle.promise().current_value;
     }
 
+    T operator()()
+    {
+        if(next())
+        {
+            return get_value();
+        }
+        return T();
+    }
+
     struct promise_type
     {
         T current_value;

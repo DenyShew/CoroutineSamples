@@ -12,11 +12,10 @@ generator<int> gen()
 
 int main()
 {
-    auto val = gen();
+    generator<int> val = gen();
     for(int i=0;i<5;i++)
     {
-        val.next();
-        std::cout << val.get_value() << std::endl;
+        std::cout << val() << std::endl;
     }
     return 0;
 }
