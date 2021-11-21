@@ -6,19 +6,25 @@
 template<class T>
 struct generator
 {
+    class iterator;
     struct promise_type;
     using coro_handle = std::coroutine_handle<promise_type>;
 
     generator(coro_handle handler)
         : handle(handler)
     {   
-
+        
     }
 
     bool resume()
     {
         if(!handle.done())handle.resume();
         return !handle.done();
+    }
+
+    bool ready()
+    {
+        return handle.done();
     }
 
     ~generator()
@@ -45,6 +51,38 @@ struct generator
         return T();
     }
 
+    iterator begin()
+    {
+        return iterator(this);
+    }
+    iterator end()
+    {
+        return iterator(this);
+    }
+
+    class iterator
+    {
+    public:
+        iterator(generator<T>* ptr)
+        {
+            this->ptr = ptr;
+        }
+        iterator& operator++()
+        {
+            ptr->next();
+        }
+        T operator*()
+        {
+            return this->ptr->get_value();
+        }
+        bool operator!=(const iterator& other)
+        {
+            return !(ptr->ready());
+        }
+    private:
+        generator<T>* ptr;
+    };
+
     struct promise_type
     {
         T current_value;
@@ -59,7 +97,7 @@ struct generator
         }
         auto initial_suspend()noexcept
         {
-            return std::suspend_always{};
+            return std::suspend_never{};
         }
         auto final_suspend()noexcept
         {
@@ -71,7 +109,6 @@ struct generator
 
         }
     };
-
 private:
     coro_handle handle;    
 };
