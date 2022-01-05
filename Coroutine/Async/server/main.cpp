@@ -75,24 +75,9 @@ public:
 
 };
 
-int setnonblocking(int sock)
+void setnonblocking(int sock)
 {
-    int opts;
-
-    opts = fcntl(sock,F_GETFL);
-    if (opts < 0)
-    {
-    perror("fcntl(F_GETFL)");
-    return -1;
-    }
-    opts = (opts | O_NONBLOCK);
-    if (fcntl(sock,F_SETFL,opts) < 0)
-    {
-    perror("fcntl(F_SETFL)");
-    return -1;
-    }
-
-    return 0;
+    fcntl(sock, F_SETFL, fcntl(sock, F_GETFD, 0)|O_NONBLOCK);
 }
 
 int main()
@@ -125,7 +110,7 @@ int main()
         return 4;
     }
     std::cout << "Accepted" << std::endl;
-    struct epoll_event event, events[2];
+    struct epoll_event event, events[1];
     int epoll_fd = epoll_create1(0);
 
     if(epoll_fd == -1)
@@ -133,11 +118,16 @@ int main()
         return 4;
     }
     
-    event.events = EPOLLIN | EPOLLOUT | EPOLLET | EPOLLRDHUP;
-    event.data.fd = sock;
+    event.events = EPOLLIN | EPOLLERR | EPOLLHUP | EPOLLET | EPOLLRDHUP | EPOLLOUT;
+    event.data.u64 = sock;
+    uint64_t val = (unsigned long)(14) << 32;
+    event.data.u64 |= val;
     setnonblocking(sock);
+
+    std::cout << "val: " << 14 << std::endl;
+    std::cout << "sock: " << sock << std::endl;
     
-    if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, 0, &event))
+    if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, sock, &event))
     {
         fprintf(stderr, "Failed to add file descriptor to epoll\n");
         close(epoll_fd);
@@ -145,13 +135,25 @@ int main()
     }
     
     std::cout << "Waiting epoll" << std::endl;
-    int size = epoll_wait(epoll_fd, events, 2, -1);
+    int size = epoll_wait(epoll_fd, events, 1, -1);
     std::cout << "Epoll end" << std::endl;
     for(int i=0;i<size;i++)
     {
         std::cout << "Event: " << events[i].events << std::endl;
-        int len = read(events->data.fd, buf, 1024);
-        std::cout << std::string(buf, len) << std::endl;
+        //int len = read(events->data.fd, buf, 1024);
+        //std::cout << std::string(buf, len) << std::endl;
+        if((events[i].events & EPOLLIN) == EPOLLIN)
+        {
+            std::cout << "IN" << std::endl;
+        }
+        if((events[i].events & EPOLLOUT) == EPOLLOUT)
+        {
+            std::cout << "OUT" << std::endl;
+        }
+        uint64_t help = events[i].data.u64;
+        help = help >> 32;
+        std::cout << "value: " << help << std::endl;
+        std::cout << "sock: " << int(events[i].data.u64) << std::endl;
     }
 
     if(close(epoll_fd))

@@ -30,7 +30,11 @@ int main()
         return 2;
     }
 
-    send(sock, buf, sizeof(buf), 0);
+    /*if(recv(sock, buf, sizeof(buf), 0) == -1)
+    {
+        std::cout << "very bad" << std::endl;
+        return 3;
+    }*/
     
     close(sock);
 
