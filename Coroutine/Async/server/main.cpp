@@ -16,9 +16,14 @@
 #include <functional>
 
 class task;
+
 class io_handler;
+
+template<typename T>
 class awaiter;
+
 class tcp_socket;
+
 class accept_socket;
 
 //sock-index
@@ -93,7 +98,6 @@ class io_handler
 {
 friend class tcp_socket;
 friend class accept_socket;
-friend class awaiter;
 public:
     io_handler(int size)
     {
@@ -120,6 +124,10 @@ public:
             tasks[info.index].resume();
         }
     }
+    void set_coro_by_index(int index, std::coroutine_handle<task::promise_type> coro)
+    {
+        tasks[index] = coro;
+    }
 private:
     //return index
     io_task add_sock()
@@ -129,10 +137,6 @@ private:
         rtr.write.index = rtr.read.index + 1;
         tasks.resize(tasks.size() + 2);
         return rtr;
-    }
-    void set_coro_by_index(int index, std::coroutine_handle<task::promise_type> coro)
-    {
-        tasks[index] = coro;
     }
 private:
     int events_size;
@@ -152,22 +156,22 @@ public:
     {
 
     }
-    void await_suspend(std::coroutine_handle<task::promise_type> coro)
+    void await_suspend(std::coroutine_handle<task::promise_type> coro)noexcept
     {
         handler.set_coro_by_index(index, coro);
     }
-    void await_ready()
+    bool await_ready()noexcept
     {
         return false;
     }
-    T await_resume()
+    T await_resume()noexcept
     {
         return on_resume();
     }
 private:
     io_handler& handler;
     int index;
-    std::function<T()> on_resume
+    std::function<T()> on_resume;
 };
 
 class tcp_socket
