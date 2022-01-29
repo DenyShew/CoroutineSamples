@@ -7,19 +7,43 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/epoll.h>
-#include <stdio.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <fcntl.h>
-#include <strings.h>
 #include <string.h>
 #include <arpa/inet.h>
-#include <errno.h>
 #include <stdlib.h>
-#include <sys/epoll.h>
-#include <signal.h>
 #include <iostream>
+#include <vector>
+#include <functional>
+
+class task;
+class io_handler;
+class awaiter;
+class tcp_socket;
+class accept_socket;
+
+//sock-index
+struct socket_info
+{
+    int sock;
+    int index;
+};
+
+socket_info unpack(uint64_t val)
+{
+    socket_info info;
+    info.index = int(val);
+    info.sock = val >> 32;
+    return info;
+}
+
+uint64_t pack(socket_info val)
+{
+    uint64_t rtr = 0;
+    rtr |= val.sock;
+    rtr = rtr << 32;
+    rtr |= val.index;
+    return rtr;
+}
 
 class task
 {
@@ -38,7 +62,10 @@ public:
         {
             return std::suspend_always{};
         }
-        void return_void(){}
+        void return_void()
+        {
+
+        }
         void unhandled_exception()
         {
             
@@ -51,22 +78,102 @@ public:
     }
 };
 
-class io_handler
+struct io_task
 {
-public:
-
+    struct elementary_io_task
+    {
+        int index;
+        std::coroutine_handle<task::promise_type> coro;
+    };
+    elementary_io_task read;
+    elementary_io_task write;
 };
 
+class io_handler
+{
+friend class tcp_socket;
+friend class accept_socket;
+friend class awaiter;
+public:
+    io_handler(int size)
+    {
+        epoll_fd = epoll_create1(0);
+        events_size = size;
+        events = new struct epoll_event[size];
+    }
+    void run()
+    {
+        int size = epoll_wait(epoll_fd, events, events_size, -1);
+        for(int i=0;i<size;i++)
+        {
+            socket_info info = unpack(events[i].data.u64);
+            if((events[i].events & EPOLLERR) == EPOLLERR)
+            {
+                //TODO
+                continue;
+            }
+            if((events[i].events & EPOLLHUP) == EPOLLHUP)
+            {
+                //TODO
+                continue;
+            }
+            tasks[info.index].resume();
+        }
+    }
+private:
+    //return index
+    io_task add_sock()
+    {
+        io_task rtr;
+        rtr.read.index = tasks.size();
+        rtr.write.index = rtr.read.index + 1;
+        tasks.resize(tasks.size() + 2);
+        return rtr;
+    }
+    void set_coro_by_index(int index, std::coroutine_handle<task::promise_type> coro)
+    {
+        tasks[index] = coro;
+    }
+private:
+    int events_size;
+    int epoll_fd;
+    struct epoll_event* events;
+    std::vector<std::coroutine_handle<task::promise_type>> tasks;
+};
+
+template<typename T>
 class awaiter
 {
 public:
+    awaiter(io_handler& handler, int index, const std::function<T()>& on_resume)
+        : handler(handler)
+        , index(index)
+        , on_resume(on_resume)
+    {
 
+    }
+    void await_suspend(std::coroutine_handle<task::promise_type> coro)
+    {
+        handler.set_coro_by_index(index, coro);
+    }
+    void await_ready()
+    {
+        return false;
+    }
+    T await_resume()
+    {
+        return on_resume();
+    }
+private:
+    io_handler& handler;
+    int index;
+    std::function<T()> on_resume
 };
 
 class tcp_socket
 {
 public:
-
+    
 };
 
 class accept_socket
@@ -77,7 +184,7 @@ public:
 
 void setnonblocking(int sock)
 {
-    fcntl(sock, F_SETFL, fcntl(sock, F_GETFD, 0)|O_NONBLOCK);
+    fcntl(sock, F_SETFL, fcntl(sock, F_GETFD, 0) | O_NONBLOCK);
 }
 
 int main()
