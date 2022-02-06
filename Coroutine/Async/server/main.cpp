@@ -85,19 +85,20 @@ public:
 
 struct io_task
 {
-    struct elementary_io_task
-    {
-        int index;
-        std::coroutine_handle<task::promise_type> coro;
-    };
-    elementary_io_task read;
-    elementary_io_task write;
+    int index;
+    std::coroutine_handle<task::promise_type> coro;
 };
 
 class io_handler
 {
 friend class tcp_socket;
 friend class accept_socket;
+private:
+    struct elementary_task
+    {
+        std::coroutine_handle<task::promise_type> coro;
+        bool is_set;
+    };
 public:
     io_handler(int size)
     {
@@ -111,6 +112,7 @@ public:
         for(int i=0;i<size;i++)
         {
             socket_info info = unpack(events[i].data.u64);
+            std::cout << "current sock event: " << info.sock << std::endl;
             if((events[i].events & EPOLLERR) == EPOLLERR)
             {
                 //TODO
@@ -121,38 +123,64 @@ public:
                 //TODO
                 continue;
             }
-            tasks[info.index].resume();
+            if((events[i].events & EPOLLIN) == EPOLLIN)
+            {
+                std::cout << "epollin" << std::endl;
+                if(tasks[info.index].is_set)
+                {
+                    tasks[info.index].coro.resume();
+                }
+                continue;
+            }
         }
     }
     void set_coro_by_index(int index, std::coroutine_handle<task::promise_type> coro)
     {
-        tasks[index] = coro;
+        tasks[index].coro = coro;
+        tasks[index].is_set = true;
     }
 private:
     //return index
-    io_task add_sock()
+    io_task add_sock(int sock)
     {
         io_task rtr;
-        rtr.read.index = tasks.size();
-        rtr.write.index = rtr.read.index + 1;
-        tasks.resize(tasks.size() + 2);
+        rtr.index = tasks.size();
+        tasks.resize(tasks.size() + 1);
+
+        socket_info info;
+        info.sock = sock;
+        info.index = rtr.index;
+
+        struct epoll_event ev;
+        ev.events = EPOLLIN | EPOLLERR | EPOLLHUP | EPOLLET | EPOLLRDHUP | EPOLLOUT;
+        ev.data.u64 = pack(info);
+
+        if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, sock, &ev))
+        {
+            throw std::runtime_error("Can't add in epoll");
+        }
+
         return rtr;
     }
 private:
     int events_size;
     int epoll_fd;
     struct epoll_event* events;
-    std::vector<std::coroutine_handle<task::promise_type>> tasks;
+    std::vector<elementary_task> tasks;
 };
 
 template<typename T>
-class awaiter
+class awaiter;
+
+template<>
+class awaiter<void>
 {
 public:
-    awaiter(io_handler& handler, int index, const std::function<T()>& on_resume)
+    awaiter(io_handler& handler, int index, const std::function<void()>& on_resume, bool ready)
         : handler(handler)
         , index(index)
         , on_resume(on_resume)
+        , ready(ready)
     {
 
     }
@@ -162,7 +190,38 @@ public:
     }
     bool await_ready()noexcept
     {
-        return false;
+        return ready;
+    }
+    void await_resume()noexcept
+    {
+        on_resume();
+    }
+private:
+    io_handler& handler;
+    int index;
+    std::function<void()> on_resume;
+    bool ready;
+};
+
+template<typename T>
+class awaiter
+{
+public:
+    awaiter(io_handler& handler, int index, const std::function<T()>& on_resume, bool ready)
+        : handler(handler)
+        , index(index)
+        , on_resume(on_resume)
+        , ready(ready)
+    {
+
+    }
+    void await_suspend(std::coroutine_handle<task::promise_type> coro)noexcept
+    {
+        handler.set_coro_by_index(index, coro);
+    }
+    bool await_ready()noexcept
+    {
+        return ready;
     }
     T await_resume()noexcept
     {
@@ -172,107 +231,131 @@ private:
     io_handler& handler;
     int index;
     std::function<T()> on_resume;
+    bool ready;
 };
 
 class tcp_socket
 {
+friend class accept_socket;
 public:
-    
+    awaiter<std::string> read()
+    {
+        std::cout << "read: " << tasks.index << std::endl;
+        return awaiter<std::string>(handler, tasks.index, std::bind(&tcp_socket::on_read, this), false);
+    }
+    awaiter<void> write(const std::string& val)
+    {
+        std::cout << "write: " << tasks.index << std::endl;
+        return awaiter<void>(handler, tasks.index, std::bind(&tcp_socket::on_write, this, val), true);
+    }
+    ~tcp_socket()
+    {
+        std::cout << "destroy" << std::endl;
+    }
+private:
+    tcp_socket(io_handler& handler, int sock)
+        : handler(handler)
+        , sock(sock)
+    {
+        fcntl(sock, F_SETFL, fcntl(sock, F_GETFD, 0) | O_NONBLOCK);
+        std::cout << "tcp: " << sock << std::endl;
+        tasks = handler.add_sock(sock);
+    }
+    std::string on_read()
+    {
+        std::cout << "on_read" << std::endl;
+        char buf[512];
+        int res = ::read(sock, buf, sizeof(buf));
+        std::cout << "~on_read: " << res << " " << errno << std::endl;
+        return std::string(buf, res);
+    }
+    void on_write(std::string str)
+    {
+        std::cout << "on_write" << std::endl;
+        char buf[512];
+        std::copy(str.begin(), str.begin() + std::max(str.size(), sizeof(buf)), buf);
+        int res = ::write(sock, buf, sizeof(buf));
+        std::cout << "~on_write: " << res << std::endl;
+    }
+private:
+    io_task tasks;
+    io_handler& handler;
+    int sock;
 };
 
 class accept_socket
 {
 public:
-
+    accept_socket(io_handler& handler, int port)
+        : handler(handler)
+    {
+        struct sockaddr_in addr;
+        listener = socket(AF_INET, SOCK_STREAM, 0);
+        std::cout << "listener: " << listener << std::endl;
+        if(listener < 0)
+        {
+            throw std::runtime_error("Can't createe listener");
+        }
+        
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(port);
+        addr.sin_addr.s_addr = htonl(INADDR_ANY);
+        if(bind(listener, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+        {
+            throw std::runtime_error("Can't bind the listener");
+        }
+        if(listen(listener, 1)==-1)
+        {
+            throw std::runtime_error("Can't start listen");
+        }
+        io_task current_task = handler.add_sock(listener);
+        index = current_task.index;
+    }
+    awaiter<tcp_socket> accept()
+    {
+        std::cout << "accept: " << index << std::endl;
+        return awaiter<tcp_socket>(handler, index, std::bind(&accept_socket::on_accept, this), false);
+    }
+private:
+    tcp_socket on_accept()
+    {
+        std::cout << "on_accept" << std::endl;
+        return tcp_socket(handler, ::accept(listener, 0, 0));
+    }
+private:
+    io_handler& handler;
+    int listener;
+    int index;
 };
 
-void setnonblocking(int sock)
+task accepting(accept_socket sock)
 {
-    fcntl(sock, F_SETFL, fcntl(sock, F_GETFD, 0) | O_NONBLOCK);
+    while(true)
+    {
+        tcp_socket tcp_sock = co_await sock.accept();
+        std::string res = co_await tcp_sock.read();
+        std::cout << "res: " << res << std::endl;
+        res = "Hello, " + res;
+        co_await tcp_sock.write(res);
+    }
 }
 
 int main()
 {
-    int sock, listener;
-    struct sockaddr_in addr;
-    char buf[1024];
-    int bytes_read;
+    try
+    {
+        io_handler handler(1);
+        accept_socket acc(handler, 51003);
 
-    listener = socket(AF_INET, SOCK_STREAM, 0);
-    if(listener < 0)
-    {
-        return 1;
-    }
-    
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(34250);
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    if(bind(listener, (struct sockaddr *)&addr, sizeof(addr)) < 0)
-    {
-        return 2;
-    }
-    if(listen(listener, 1)==-1)
-    {
-        return 3;
-    }
-    sock = accept(listener, 0, 0);
-    if(sock == -1)
-    {
-        return 4;
-    }
-    std::cout << "Accepted" << std::endl;
-    struct epoll_event event, events[1];
-    int epoll_fd = epoll_create1(0);
-
-    if(epoll_fd == -1)
-    {
-        return 4;
-    }
-    
-    event.events = EPOLLIN | EPOLLERR | EPOLLHUP | EPOLLET | EPOLLRDHUP | EPOLLOUT;
-    event.data.u64 = sock;
-    uint64_t val = (unsigned long)(14) << 32;
-    event.data.u64 |= val;
-    setnonblocking(sock);
-
-    std::cout << "val: " << 14 << std::endl;
-    std::cout << "sock: " << sock << std::endl;
-    
-    if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, sock, &event))
-    {
-        fprintf(stderr, "Failed to add file descriptor to epoll\n");
-        close(epoll_fd);
-        return 5;
-    }
-    
-    std::cout << "Waiting epoll" << std::endl;
-    int size = epoll_wait(epoll_fd, events, 1, -1);
-    std::cout << "Epoll end" << std::endl;
-    for(int i=0;i<size;i++)
-    {
-        std::cout << "Event: " << events[i].events << std::endl;
-        //int len = read(events->data.fd, buf, 1024);
-        //std::cout << std::string(buf, len) << std::endl;
-        if((events[i].events & EPOLLIN) == EPOLLIN)
+        task accept_client = accepting(acc);
+        for(;;)
         {
-            std::cout << "IN" << std::endl;
+            handler.run();
         }
-        if((events[i].events & EPOLLOUT) == EPOLLOUT)
-        {
-            std::cout << "OUT" << std::endl;
-        }
-        uint64_t help = events[i].data.u64;
-        help = help >> 32;
-        std::cout << "value: " << help << std::endl;
-        std::cout << "sock: " << int(events[i].data.u64) << std::endl;
     }
-
-    if(close(epoll_fd))
+    catch(std::exception& ex)
     {
-        fprintf(stderr, "Failed to close epoll file descriptor\n");
-        return 1;
+        std::cerr << ex.what() << std::endl;
     }
-    close(sock);
-    close(listener);
     return 0;
 }

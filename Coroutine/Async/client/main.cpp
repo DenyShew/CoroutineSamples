@@ -4,14 +4,16 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
+#include <thread>
+#include <chrono>
 
-char buf[1024];
+char buf[512];
 
 int main()
 {
-    char* help = "Hello";
-    memset(buf, 1024, 0);
-    memcpy(buf, help, 5);
+    char* help = "Master";
+    memset(buf, 512, 0);
+    memcpy(buf, help, 7);
     int sock;
     struct sockaddr_in addr;
 
@@ -22,7 +24,7 @@ int main()
     }
 
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(34250); // или любой другой порт...
+    addr.sin_port = htons(51003);
     addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     if(connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
     {
@@ -30,13 +32,24 @@ int main()
         return 2;
     }
 
-    /*if(recv(sock, buf, sizeof(buf), 0) == -1)
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+
+    if(send(sock, buf, sizeof(buf), 0) == -1)
     {
-        std::cout << "very bad" << std::endl;
+        std::cout << "very bad: " << errno << std::endl;
         return 3;
-    }*/
+    }
+
+    int len;
+    if((len = recv(sock, buf, sizeof(buf), 0)) == -1)
+    {
+        std::cout << "very very bad: " << errno << std::endl;
+        return 3;
+    }
     
     close(sock);
+
+    std::cout << std::string(buf, len) << std::endl;
 
     return 0;
 }
