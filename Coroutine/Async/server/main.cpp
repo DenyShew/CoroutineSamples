@@ -65,7 +65,7 @@ public:
         }
         auto final_suspend()noexcept
         {
-            return std::suspend_always{};
+            return std::suspend_never{};
         }
         void return_void()
         {
@@ -145,14 +145,14 @@ private:
     {
         io_task rtr;
         rtr.index = tasks.size();
-        tasks.resize(tasks.size() + 1);
+        tasks.push_back(elementary_task{});
 
         socket_info info;
         info.sock = sock;
         info.index = rtr.index;
 
         struct epoll_event ev;
-        ev.events = EPOLLIN | EPOLLERR | EPOLLHUP | EPOLLET | EPOLLRDHUP | EPOLLOUT;
+        ev.events = EPOLLIN | EPOLLERR | EPOLLHUP | EPOLLET | EPOLLRDHUP;
         ev.data.u64 = pack(info);
 
         if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, sock, &ev))
@@ -161,6 +161,13 @@ private:
         }
 
         return rtr;
+    }
+    void remove_sock(int sock)
+    {
+        if(epoll_ctl(epoll_fd, EPOLL_CTL_DEL, sock, 0))
+        {
+            throw std::runtime_error("Can't remove in epoll");
+        }
     }
 private:
     int events_size;
@@ -251,19 +258,40 @@ public:
     ~tcp_socket()
     {
         std::cout << "destroy" << std::endl;
+        if(sock != -1)
+        {
+            handler.remove_sock(sock);
+            close(sock);
+        }
+    }
+    tcp_socket(tcp_socket&& other)
+        : handler(other.handler)
+        , tasks(other.tasks)
+        , sock(other.sock)
+    {
+        std::cout << "move" << std::endl;
+        other.sock = -1;
+    }
+    tcp_socket(const tcp_socket& other)
+        : handler(other.handler)
+        , tasks(other.tasks)
+        , sock(other.sock)
+    {
+        std::cout << "copy" << std::endl;
     }
 private:
     tcp_socket(io_handler& handler, int sock)
         : handler(handler)
         , sock(sock)
     {
+        std::cout << "construct" << std::endl;
         fcntl(sock, F_SETFL, fcntl(sock, F_GETFD, 0) | O_NONBLOCK);
         std::cout << "tcp: " << sock << std::endl;
         tasks = handler.add_sock(sock);
     }
     std::string on_read()
     {
-        std::cout << "on_read" << std::endl;
+        std::cout << "on_read: " << sock << std::endl;
         char buf[512];
         int res = ::read(sock, buf, sizeof(buf));
         std::cout << "~on_read: " << res << " " << errno << std::endl;
@@ -271,11 +299,11 @@ private:
     }
     void on_write(std::string str)
     {
-        std::cout << "on_write" << std::endl;
+        std::cout << "on_write: " << sock << std::endl;
         char buf[512];
         std::copy(str.begin(), str.begin() + std::max(str.size(), sizeof(buf)), buf);
         int res = ::write(sock, buf, sizeof(buf));
-        std::cout << "~on_write: " << res << std::endl;
+        std::cout << "~on_write: " << res << " " << errno << std::endl;
     }
 private:
     io_task tasks;
@@ -316,6 +344,10 @@ public:
         std::cout << "accept: " << index << std::endl;
         return awaiter<tcp_socket>(handler, index, std::bind(&accept_socket::on_accept, this), false);
     }
+    ~accept_socket()
+    {
+        std::cout << "destroy accept" << std::endl;
+    }
 private:
     tcp_socket on_accept()
     {
@@ -328,34 +360,29 @@ private:
     int index;
 };
 
-task accepting(accept_socket sock)
+task communication(tcp_socket sock)
 {
-    while(true)
-    {
-        tcp_socket tcp_sock = co_await sock.accept();
-        std::string res = co_await tcp_sock.read();
-        std::cout << "res: " << res << std::endl;
-        res = "Hello, " + res;
-        co_await tcp_sock.write(res);
-    }
+    std::string res = co_await sock.read();
+    std::cout << "res: " << res << std::endl;
+    res = "Hello, " + res;
+    co_await sock.write(res);
+}
+
+task accepting(io_handler& handle)
+{
+    accept_socket sock(handle, 51003);
+    auto comm1 = communication(co_await sock.accept());
+    auto comm2 = communication(co_await sock.accept());
+    auto comm3 = communication(std::move(co_await sock.accept()));
 }
 
 int main()
 {
-    try
+    io_handler handler(1);
+    auto acc = accepting(handler);
+    for(;;)
     {
-        io_handler handler(1);
-        accept_socket acc(handler, 51003);
-
-        task accept_client = accepting(acc);
-        for(;;)
-        {
-            handler.run();
-        }
-    }
-    catch(std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
+        handler.run();
     }
     return 0;
 }

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <random>
 
 char buf[512];
 
@@ -32,7 +33,10 @@ int main()
         return 2;
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::random_device rd;
+    std::mt19937 e{rd()};
+    std::uniform_int_distribution<int> dist{5, 13};
+    std::this_thread::sleep_for(std::chrono::seconds(dist(e)));
 
     if(send(sock, buf, sizeof(buf), 0) == -1)
     {
